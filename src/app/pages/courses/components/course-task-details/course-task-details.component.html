@@ -1,0 +1,64 @@
+<ion-toolbar>
+    <ion-title>{{ task.title }}</ion-title>
+    <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+</ion-toolbar>
+<ion-content>
+    <div class="task-header">
+        <ion-item lines="none">
+            <ion-label>
+                <p class="sub-label">Title</p>
+                {{ task.title }}
+            </ion-label>
+            <ion-label slot="end">
+                <p class="sub-label-right">Priority</p>
+                {{ task.priority }}
+            </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-label>
+                <p class="sub-label">Due Date</p>
+                {{ task.date }}
+            </ion-label>
+            <ion-label slot="end">
+                <p class="sub-label-right">Time left</p>
+                {{ timeLeft }}
+            </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-label>
+                <p class="sub-label">Active</p>
+                {{ task.active }}
+            </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-label text-wrap>
+                <p class="sub-label">Description</p>
+                {{ task.description }}
+            </ion-label>
+        </ion-item>
+    </div>
+    <div *ngIf="(userRole$ | async) === 'Professor'">
+        <ion-list-header lines="full">
+            <ion-label>
+                <p class="sub-label">{{subCount}} Students</p>
+                Statistics
+            </ion-label>
+            <ion-button color="danger" fill="solid" size="small" (click)="resetStatsAlert()" style="margin-right: 20px;">Reset Statistics</ion-button>
+        </ion-list-header>
+        <div *ngIf="subCount >= 1" echarts [options]="completedChart$ | async" [merge]="completedChart$ | async" class="chart"></div>
+        <div *ngIf="(task$ | async).feedback && (task$ | async).feedback.length >= 1">
+            <div echarts [options]="feedbackChart$ | async" [merge]="feedbackChart$ | async" class="chart"></div>
+            <div echarts [options]="questionChart$ | async" [merge]="questionChart$ | async" class="chart-question"></div>
+            <ion-list-header lines="full">
+                <ion-label>Feedback Messages
+                    <ion-badge>{{(feedbackMessages$ | async).length}}</ion-badge>
+                </ion-label>
+            </ion-list-header>
+            <ion-item *ngFor="let message of feedbackMessages$ | async">
+                <ion-label class="ion-text-wrap">{{message}}</ion-label>
+            </ion-item>
+        </div>
+    </div>
+</ion-content>

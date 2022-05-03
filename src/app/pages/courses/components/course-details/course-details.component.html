@@ -1,0 +1,203 @@
+<ion-toolbar>
+    <ion-title>{{ (course$ | async).courseName }}</ion-title>
+    <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+</ion-toolbar>
+<ion-content>
+    <div class="course-header" *ngIf="course$ | async as course">
+        <ion-item lines="none">
+            <ion-label>
+                <p class="sub-label">Course Name</p>
+                {{ course.courseName }}
+            </ion-label>
+            <ion-label slot="end">
+                <p class="sub-label-right">Course Code</p>
+                {{ course.courseId }}
+            </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-label>
+                <p class="sub-label">Professor</p>
+                {{ course.ownerName }}
+            </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-label>
+                <p class="sub-label">Link</p>
+                {{ course.link }}
+            </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-label text-wrap>
+                <p class="sub-label">Description</p>
+                {{ course.description }}
+            </ion-label>
+        </ion-item>
+        <ion-item *ngIf="(userRole$| async) === 'Professor'" lines="full">
+            <ion-label>
+                <p class="sub-label">Students</p>
+                {{ course.subCount }}
+            </ion-label>
+            <ion-button slot="end" color="warning" size="small" (click)="editCourse(course)">Edit Course</ion-button>
+            <ion-button slot="end" color="danger" size="small" (click)="deleteCourseConfirm(course.courseId, course.docId, course.subscribers)">Delete Course</ion-button>
+        </ion-item>
+        <ion-item *ngIf="(userRole$| async) === 'Student'" lines="full">
+            <ion-button slot="end" color="danger" size="small" (click)="unsubscribeCourseConfirm(course.courseId, course.docId)">Unsubscribe Course</ion-button>
+        </ion-item>
+    </div>
+    <ion-list-header lines="full">
+        <ion-label>Tasks</ion-label>
+    </ion-list-header>
+    <div class="course-tasks">
+        <ion-list *ngIf="(tasks$ | async) as tasks">
+            <div *ngFor="let date of tasks | keyvalue" class="date-divider">
+                <ion-item-divider [color]="timeService.getTimeLeft(date.key) !== 'none' ? 'primary' : 'danger'" sticky="true">
+                    <ion-label>{{date.key}}</ion-label>
+                    <ion-label slot="end">{{timeService.getTimeLeft(date.key)}}</ion-label>
+                </ion-item-divider>
+                <ion-item-sliding *ngFor="let task of date.value; index as i" #item>
+                    <ion-item [id]="'item'+i" (click)="openCourseTaskDetails(task)">
+                        <ion-label>{{ task.title }}</ion-label>
+                        <ion-label slot="end">{{ task.priority }}</ion-label>
+                    </ion-item>
+                    <ion-item-options *ngIf="(userRole$ | async) === 'Professor'" side="end">
+                        <ion-item-option color="danger" (click)="deleteCourseTaskConfirm(task.docId, item)">Delete</ion-item-option>
+                        <ion-item-option color="warning" (click)="editCourseTask(task, item)">Edit</ion-item-option>
+                    </ion-item-options>
+                </ion-item-sliding>
+            </div>
+        </ion-list>
+    </div>
+</ion-content>
+
+<!-- Edit Course Modal -->
+<ion-modal [isOpen]="isModalEditCourseOpen">
+    <ng-template>
+        <ion-toolbar>
+            <ion-title>Edit Course</ion-title>
+            <ion-buttons slot="end">
+                <ion-button (click)="closeModal()">Close</ion-button>
+            </ion-buttons>
+        </ion-toolbar>
+        <ion-content>
+            <form [formGroup]="editCourseForm">
+                <ion-item>
+                    <ion-label position="fixed">Course Code</ion-label>
+                    <ion-label>{{ (course$ | async).courseId }}</ion-label>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Course Name</ion-label>
+                    <ion-input type="text" formControlName="courseName"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Professor</ion-label>
+                    <ion-input type="text" formControlName="ownerName"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Description (Optional)</ion-label>
+                    <ion-input type="text" formControlName="description"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Link (Optional)</ion-label>
+                    <ion-input type="text" formControlName="link"></ion-input>
+                </ion-item>
+            </form>
+        </ion-content>
+        <ion-footer>
+            <ion-button expand="full" vertical="bottom" [disabled]="!editCourseForm.valid" (click)="updateCourse()">Update Course</ion-button>
+        </ion-footer>
+    </ng-template>
+</ion-modal>
+
+
+<!-- Create Course Task Modal -->
+<ion-modal trigger="create-course-task-modal">
+    <ng-template>
+        <ion-toolbar>
+            <ion-title>Create Task</ion-title>
+            <ion-buttons slot="end">
+                <ion-button (click)="closeModal()">Close</ion-button>
+            </ion-buttons>
+        </ion-toolbar>
+        <ion-content>
+            <form [formGroup]="createTaskForm">
+                <ion-item lines="full">
+                    <ion-label position="floating">Title</ion-label>
+                    <ion-input type="text" formControlName="title"></ion-input>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="floating">Priority</ion-label>
+                    <ion-select placeholder="Select Priority" formControlName="priority">
+                        <ion-select-option value="High">High</ion-select-option>
+                        <ion-select-option value="Medium">Medium</ion-select-option>
+                        <ion-select-option value="Low">Low</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="stacked">Due Date</ion-label>
+                    <ion-input type="date" formControlName="date"></ion-input>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="floating">Description</ion-label>
+                    <ion-textarea formControlName="description"></ion-textarea>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-checkbox formControlName="active"></ion-checkbox>
+                    <ion-label position="fixed">Active</ion-label>
+                </ion-item>
+            </form>
+        </ion-content>
+        <ion-footer>
+            <ion-button expand="full" vertical="bottom" [disabled]="!createTaskForm.valid" (click)="createTask()">Create Task</ion-button>
+        </ion-footer>
+    </ng-template>
+</ion-modal>
+
+<!-- Edit Course Task Modal -->
+<ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+        <ion-toolbar>
+            <ion-title>Edit Task</ion-title>
+            <ion-buttons slot="end">
+                <ion-button (click)="closeModal()">Close</ion-button>
+            </ion-buttons>
+        </ion-toolbar>
+        <ion-content>
+            <form [formGroup]="editTaskForm">
+                <ion-item lines="full">
+                    <ion-label position="floating">Title</ion-label>
+                    <ion-input type="text" formControlName="title"></ion-input>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="floating">Priority</ion-label>
+                    <ion-select placeholder="Select Priority" formControlName="priority">
+                        <ion-select-option value="High">High</ion-select-option>
+                        <ion-select-option value="Medium">Medium</ion-select-option>
+                        <ion-select-option value="Low">Low</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="stacked">Due Date</ion-label>
+                    <ion-input type="date" formControlName="date"></ion-input>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="floating">Description</ion-label>
+                    <ion-textarea formControlName="description"></ion-textarea>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-checkbox formControlName="active"></ion-checkbox>
+                    <ion-label position="fixed">Active</ion-label>
+                </ion-item>
+            </form>
+        </ion-content>
+        <ion-footer>
+            <ion-button expand="full" vertical="bottom" [disabled]="!editTaskForm.valid" (click)="updateTask()">Update Task</ion-button>
+        </ion-footer>
+    </ng-template>
+</ion-modal>
+
+<!-- Footer -->
+<ion-footer>
+    <ion-button *ngIf="(userRole$ | async) === 'Professor'" id="create-course-task-modal" expand="full">Create Task</ion-button>
+</ion-footer>

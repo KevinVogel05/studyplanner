@@ -1,0 +1,66 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title></ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <!-- Login Screen -->
+    <div class="sp-logo-placeholder">Logo</div>
+    <form [formGroup]="loginForm">
+        <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" formControlName="email"></ion-input>
+            <div *ngIf="loginForm.get('email').hasError('email')" class="input-error-message">Please enter a Valid Email.</div>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" formControlName="password"></ion-input>
+        </ion-item>
+        <br>
+        <ion-button expand="full" [disabled]="!loginForm.valid" (click)="login()">Login</ion-button>
+    </form>
+    <div id="register-modal" class="register-modal-button">Create Account</div>
+
+
+    <!-- Register Modal -->
+    <ion-modal trigger="register-modal">
+        <ng-template>
+            <ion-toolbar>
+                <ion-title>Register</ion-title>
+                <ion-buttons slot="end">
+                    <ion-button (click)="closeModal()">Close</ion-button>
+                </ion-buttons>
+            </ion-toolbar>
+            <ion-content>
+                <div class="sp-logo-placeholder">Logo</div>
+                <form [formGroup]="registerForm">
+                    <ion-item lines="full">
+                        <ion-label position="stacked">Email</ion-label>
+                        <ion-input type="email" formControlName="email"></ion-input>
+                        <div *ngIf="registerForm.get('email').hasError('email')" class="input-error-message">Please enter a Valid Email.</div>
+                    </ion-item>
+                    <ion-item lines="full">
+                        <ion-label position="floating">Password</ion-label>
+                        <ion-input type="password" formControlName="password"></ion-input>
+                        <div *ngIf="registerForm.get('password').hasError('minlength')" class="input-error-message">Password has to be at least 6 character long.</div>
+                    </ion-item>
+                    <ion-item lines="full">
+                        <ion-label position="floating">Password Confirm</ion-label>
+                        <ion-input type="password" formControlName="passwordConfirm"></ion-input>
+                        <div *ngIf="registerForm.get('passwordConfirm').hasError('passwordMismatch')" class="input-error-message">Passwords don't match.</div>
+                    </ion-item>
+                    <ion-item lines="full">
+                        <ion-label position="floating">Role</ion-label>
+                        <ion-select placeholder="Select Role" formControlName="role">
+                            <ion-select-option value="Student">Student</ion-select-option>
+                            <ion-select-option value="Professor">Professor</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <br>
+                    <ion-button expand="full" [disabled]="!registerForm.valid" (click)="register()">Create Account</ion-button>
+                </form>
+            </ion-content>
+        </ng-template>
+    </ion-modal>
+</ion-content>

@@ -1,0 +1,41 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>settings</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="user$ | async as user">
+    <div *ngIf="courses$ | async as courses">
+        <div *ngIf="(coursesC$ | async).length >= 1">
+            <ion-list-header lines="full">
+                <ion-label>Course Colors</ion-label>
+            </ion-list-header>
+            <div *ngFor="let course of coursesC; index as i" class="custom-item">
+                <input autocomplete="false" class="color-picker-custom" [(colorPicker)]="color[i]" [style.background]="color[i]" [cpPosition]="'bottom'" />
+                <ion-label>{{course.courseName}}</ion-label>
+            </div>
+            <ion-button *ngIf="userDocId$ | async as userDocId" expand="full" size="small" (click)="updateColors(userDocId)">Update Colors</ion-button>
+        </div>
+
+        <ion-list-header lines="full">
+            <ion-label>Account ({{user.email}})</ion-label>
+        </ion-list-header>
+        <ion-item lines="none">
+            <ion-button (click)="changePassword(user)">Change Password</ion-button>
+        </ion-item>
+        <div *ngIf="coursesDocId$ | async as coursesId">
+            <ion-item *ngIf="user.role === 'Student'" lines="none">
+                <ion-button color="danger" (click)="deleteUserStudent(user, coursesId)">Delete Account</ion-button>
+            </ion-item>
+            <div *ngIf="courseTaskDocId$ | async as cTaskId">
+                <div *ngIf="coursesSubs$ | async as cSubs">
+                    <ion-item *ngIf="user.role === 'Professor'" lines="none">
+                        <ion-button color="danger" (click)="deleteUserProfessor(user, coursesId, courses, cSubs)">Delete User</ion-button>
+                    </ion-item>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</ion-content>

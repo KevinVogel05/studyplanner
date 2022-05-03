@@ -1,0 +1,107 @@
+<ion-toolbar>
+    <ion-title>Feedback: {{ task.title }}</ion-title>
+    <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+</ion-toolbar>
+<ion-content>
+    <form [formGroup]="feedbackForm">
+        <ion-list>
+            <ion-radio-group formControlName="learn">
+                <ion-list-header>
+                    <ion-label>Did you learn something from this task?</ion-label>
+                </ion-list-header>
+                <ion-item>
+                    <ion-label>Yes</ion-label>
+                    <ion-radio slot="start" value="yes"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Neutral</ion-label>
+                    <ion-radio slot="start" value="neutral"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>No</ion-label>
+                    <ion-radio slot="start" value="no"></ion-radio>
+                </ion-item>
+            </ion-radio-group>
+            <ion-radio-group formControlName="difficulty">
+                <ion-list-header>
+                    <ion-label>Was this task difficult?</ion-label>
+                </ion-list-header>
+                <ion-item>
+                    <ion-label>Yes</ion-label>
+                    <ion-radio slot="start" value="yes"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Neutral</ion-label>
+                    <ion-radio slot="start" value="neutral"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>No</ion-label>
+                    <ion-radio slot="start" value="no"></ion-radio>
+                </ion-item>
+            </ion-radio-group>
+            <ion-radio-group formControlName="time">
+                <ion-list-header>
+                    <ion-label>Did you have enough time?</ion-label>
+                </ion-list-header>
+                <ion-item>
+                    <ion-label>Yes</ion-label>
+                    <ion-radio slot="start" value="yes"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Neutral</ion-label>
+                    <ion-radio slot="start" value="neutral"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>No</ion-label>
+                    <ion-radio slot="start" value="no"></ion-radio>
+                </ion-item>
+            </ion-radio-group>
+            <ion-radio-group formControlName="type">
+                <ion-list-header>
+                    <ion-label>Did you like this type of task?</ion-label>
+                </ion-list-header>
+                <ion-item>
+                    <ion-label>Yes</ion-label>
+                    <ion-radio slot="start" value="yes"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Neutral</ion-label>
+                    <ion-radio slot="start" value="neutral"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>No</ion-label>
+                    <ion-radio slot="start" value="no"></ion-radio>
+                </ion-item>
+            </ion-radio-group>
+            <ion-radio-group formControlName="relevance">
+                <ion-list-header>
+                    <ion-label>Do you think this task is relevant?</ion-label>
+                </ion-list-header>
+                <ion-item>
+                    <ion-label>Yes</ion-label>
+                    <ion-radio slot="start" value="yes"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Neutral</ion-label>
+                    <ion-radio slot="start" value="neutral"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>No</ion-label>
+                    <ion-radio slot="start" value="no"></ion-radio>
+                </ion-item>
+            </ion-radio-group>
+            <ion-list-header>
+                <ion-label>Custom Message</ion-label>
+            </ion-list-header>
+            <ion-item>
+                <ion-textarea formControlName="message"></ion-textarea>
+            </ion-item>
+        </ion-list>
+    </form>
+</ion-content>
+
+<ion-footer>
+    <ion-button (click)="sendFeedback()" expand="full">Send Feedback</ion-button>
+</ion-footer>

@@ -1,0 +1,50 @@
+<ion-toolbar>
+    <ion-title>{{ task.title }}</ion-title>
+    <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+</ion-toolbar>
+<ion-content>
+    <div class="task-header">
+        <ion-item lines="none">
+            <ion-label>
+                <p class="sub-label">Title</p>
+                {{ task.title }}
+            </ion-label>
+            <ion-label slot="end">
+                <p class="sub-label-right">Priority</p>
+                {{ task.priority }}
+            </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-label>
+                <p class="sub-label">Due Date</p>
+                {{ task.date }}
+            </ion-label>
+            <ion-label slot="end">
+                <p class="sub-label-right">Time left</p>
+                {{ timeLeft }}
+            </ion-label>
+        </ion-item>
+        <ion-item lines="none" *ngIf="task.active === true">
+            <ion-label>
+                <p class="sub-label">Active</p>
+                {{ task.active }}
+            </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-label text-wrap>
+                <p class="sub-label">Description</p>
+                {{ task.description }}
+            </ion-label>
+        </ion-item>
+    </div>
+</ion-content>
+
+<div *ngIf="isCompleted === false">
+    <ion-footer>
+        <ion-button *ngIf="(userRole$ | async) === 'Professor'" (click)="completePersonalTask()" expand="full" [disabled]="(task.active === true) ? true : false">Task Completed</ion-button>
+        <ion-button *ngIf="(userRole$ | async) === 'Student' && task.active !== true" (click)="completePersonalTask()" expand="full">Task Completed</ion-button>
+        <ion-button *ngIf="(userRole$ | async) === 'Student' && task.active === true" (click)="openFeedbackAlert()" expand="full">Task Completed</ion-button>
+    </ion-footer>
+</div>

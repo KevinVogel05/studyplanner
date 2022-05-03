@@ -1,0 +1,134 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>tasks</ion-title>
+    </ion-toolbar>
+    <ion-segment (ionChange)="filterChanged($event)" value="allFirst">
+        <ion-segment-button value="allFirst">
+            <ion-label>All</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="open">
+            <ion-label>Open</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="completed">
+            <ion-label>Completed</ion-label>
+        </ion-segment-button>
+    </ion-segment>
+    <ion-segment (ionChange)="filterChanged($event)" value="allSecond">
+        <ion-segment-button value="allSecond">
+            <ion-label>All</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="courses">
+            <ion-label>Courses</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="personal">
+            <ion-label>Personal</ion-label>
+        </ion-segment-button>
+    </ion-segment>
+</ion-header>
+
+<ion-content>
+    <ion-list *ngIf="(sortedTasks$ | async) as tasks">
+        <div *ngFor="let date of tasks | keyvalue" class="date-divider">
+            <ion-item-divider [color]="timeService.getTimeLeft(date.key) !== 'none' ? 'primary' : 'danger'" sticky="true">
+                <ion-label>{{date.key}}</ion-label>
+                <ion-label slot="end">{{timeService.getTimeLeft(date.key)}}</ion-label>
+            </ion-item-divider>
+            <ion-item-sliding *ngFor="let task of date.value; index as i" #item>
+                <ion-item (click)="openTaskDetails(task)" [ngClass]="task.courseId ? task.courseId : 'ptask'" color="-">
+                    <ion-label>{{ task.title }}</ion-label>
+                    <ion-label slot="end">{{ task.priority }}</ion-label>
+                </ion-item>
+                <ion-item-options *ngIf="task.completed === false || task.completed === true" side="end">
+                    <ion-item-option color="danger" (click)="deletePersonalTaskConfirm(task.docId, item)">Delete</ion-item-option>
+                    <ion-item-option color="warning" (click)="editPersonalTask(task, item)">Edit</ion-item-option>
+                </ion-item-options>
+            </ion-item-sliding>
+        </div>
+    </ion-list>
+
+    <!-- fab placed to the bottom end -->
+    <div>
+        <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+            <ion-fab-button id="create-personal-task-modal">
+                <ion-icon name="add"></ion-icon>
+            </ion-fab-button>
+        </ion-fab>
+    </div>
+</ion-content>
+
+<ion-modal trigger="create-personal-task-modal">
+    <ng-template>
+        <ion-toolbar>
+            <ion-title>Create Task</ion-title>
+            <ion-buttons slot="end">
+                <ion-button (click)="closeModal()">Close</ion-button>
+            </ion-buttons>
+        </ion-toolbar>
+        <ion-content>
+            <form [formGroup]="createTaskForm">
+                <ion-item lines="full">
+                    <ion-label position="floating">Title</ion-label>
+                    <ion-input type="text" formControlName="title"></ion-input>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="floating">Priority</ion-label>
+                    <ion-select placeholder="Select Priority" formControlName="priority">
+                        <ion-select-option value="High">High</ion-select-option>
+                        <ion-select-option value="Medium">Medium</ion-select-option>
+                        <ion-select-option value="Low">Low</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="stacked">Due Date</ion-label>
+                    <ion-input type="date" formControlName="date"></ion-input>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="floating">Description</ion-label>
+                    <ion-textarea formControlName="description"></ion-textarea>
+                </ion-item>
+            </form>
+        </ion-content>
+        <ion-footer>
+            <ion-button expand="full" vertical="bottom" [disabled]="!createTaskForm.valid" (click)="createTask()">Create Task</ion-button>
+        </ion-footer>
+    </ng-template>
+</ion-modal>
+
+<!-- Edit Personal Task Modal -->
+<ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+        <ion-toolbar>
+            <ion-title>Edit Personal Task</ion-title>
+            <ion-buttons slot="end">
+                <ion-button (click)="closeModal()">Close</ion-button>
+            </ion-buttons>
+        </ion-toolbar>
+        <ion-content>
+            <form [formGroup]="editTaskForm">
+                <ion-item lines="full">
+                    <ion-label position="floating">Title</ion-label>
+                    <ion-input type="text" formControlName="title"></ion-input>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="floating">Priority</ion-label>
+                    <ion-select placeholder="Select Priority" formControlName="priority">
+                        <ion-select-option value="High">High</ion-select-option>
+                        <ion-select-option value="Medium">Medium</ion-select-option>
+                        <ion-select-option value="Low">Low</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="stacked">Due Date</ion-label>
+                    <ion-input type="date" formControlName="date"></ion-input>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="floating">Description</ion-label>
+                    <ion-textarea formControlName="description"></ion-textarea>
+                </ion-item>
+            </form>
+        </ion-content>
+        <ion-footer>
+            <ion-button expand="full" vertical="bottom" [disabled]="!editTaskForm.valid" (click)="updatePersonalTask()">Update Task</ion-button>
+        </ion-footer>
+    </ng-template>
+</ion-modal>

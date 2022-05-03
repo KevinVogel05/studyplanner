@@ -1,3 +1,45 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+    <!-- Header -->
+    <ion-header>
+        <ion-toolbar>
+            <ion-icon *ngIf="(navigateBack$ | async) === true" (click)="navigateBack()" style="padding: 10px;" name="arrow-back" slot="start"></ion-icon>
+            <ion-title>{{ currentPage$ | async }}</ion-title>
+            <ion-icon id="options" style="padding: 10px;" name="ellipsis-horizontal" slot="end" [hidden]="(currentPage$ | async) === 'Login'"></ion-icon>
+        </ion-toolbar>
+    </ion-header>
+    <!-- Options Popover -->
+    <ion-popover trigger="options" dismissOnSelect="true">
+        <ng-template>
+            <ion-content scrollY="false">
+                <ion-item lines="full" [routerLink]="'/settings'">
+                    <ion-icon name="settings-outline" slot="start" size="small"></ion-icon>
+                    <ion-label>Settings</ion-label>
+                </ion-item>
+                <ion-item lines="full" [routerLink]="'/about'">
+                    <ion-icon name="information-outline" slot="start" size="small"></ion-icon>
+                    <ion-label>About</ion-label>
+                </ion-item>
+                <ion-item lines="none" [routerLink]="'/login'">
+                    <ion-icon name="exit-outline" slot="start" size="small"></ion-icon>
+                    <ion-label>Logout</ion-label>
+                </ion-item>
+            </ion-content>
+        </ng-template>
+    </ion-popover>
+
+    <!-- Main Content -->
+    <ion-router-outlet></ion-router-outlet>
+
+    <ion-tabs>
+        <ion-tab-bar *ngIf="(currentPage$ | async) !== 'Login'" slot="bottom">
+            <ion-tab-button tab="courses">
+                <ion-icon name="albums"></ion-icon>
+                <ion-label>Courses</ion-label>
+            </ion-tab-button>
+            <ion-tab-button tab="tasks">
+                <ion-icon name="documents"></ion-icon>
+                <ion-label>Tasks</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+    </ion-tabs>
 </ion-app>
