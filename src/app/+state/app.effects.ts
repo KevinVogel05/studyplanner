@@ -172,11 +172,11 @@ export class AppEffects {
               });
             }
             return AppActions.loginFailed({
-              message: 'Login failed. Please make sure you enterd the right password and email.'
+              message: 'Login failed. Please make sure you entered the right password and email.'
             });
           }),
           catchError(() => of(AppActions.loginFailed({
-            message: 'Login failed. Please make sure you enterd the right password and email.'
+            message: 'Login failed. Please make sure you entered the right password and email.'
           })))
         );
         return user$;
@@ -198,7 +198,7 @@ export class AppEffects {
             const loadedCourses = loadedDoc.courses;
             return AppActions.loadUserDataSuccess({ role: loadedRole, docId: loadedDocId, courses: loadedCourses });
           }),
-          catchError(() => of(AppActions.loadUserRoleFailed()))
+          catchError(() => of(AppActions.loadUserRoleFailed({ message: 'Failed to load User' })))
         );
         return user$;
       })
@@ -460,12 +460,12 @@ export class AppEffects {
   );
 
   //increase course subCount
-  icreaseCourseSubCount$ = createEffect(() =>
+  increaseCourseSubCount$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AppActions.loadSubscribedCourseSuccess),
       mergeMap((payload) => {
         const user$ = from(this.fireStore.collection('courses').doc(payload.course.docId).update(
-          { subCount: increment(1), subscribers: arrayUnion(payload.userId) })).pipe(
+          { subscribers: arrayUnion(payload.userId) })).pipe(
             map(() => AppActions.updateSubCountSuccess()),
             catchError(() => of(AppActions.updateSubCountFailed()))
           );
@@ -474,13 +474,13 @@ export class AppEffects {
     )
   );
 
-  //decrease course subCount
+  //decrease course subCount [subCount: increment(-1)]
   decreaseCourseSubCount$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AppActions.decreaseSubCount),
       mergeMap((payload) => {
         const user$ = from(this.fireStore.collection('courses').doc(payload.courseDocId).update(
-          { subCount: increment(-1), subscribers: arrayRemove(payload.userId) })).pipe(
+          { subscribers: arrayRemove(payload.userId) })).pipe(
             map(() => AppActions.decreaseSubCountSuccess()),
             catchError(() => of(AppActions.decreaseSubCountFailed()))
           );

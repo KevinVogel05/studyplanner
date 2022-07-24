@@ -1,4 +1,3 @@
-import { Task } from './task.interface';
 export interface Course {
   courseId: string;
   courseName: string;
@@ -6,7 +5,7 @@ export interface Course {
   ownerName: string;
   description?: string;
   link: string;
-  subscribers: string[]; //TODO implement it/not opt ----- instead of subCount
+  subscribers: string[];
   subCount: number;
   docId?: string;
 }

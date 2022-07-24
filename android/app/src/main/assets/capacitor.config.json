@@ -1,0 +1,6 @@
+{
+	"appId": "com.ba.studyplanner",
+	"appName": "Studyplanner",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

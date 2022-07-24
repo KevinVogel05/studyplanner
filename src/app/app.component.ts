@@ -1,9 +1,12 @@
+import { MessagingService } from './services/messaging.service';
 import { selectCurrentPage } from './+state/app.selectors';
 import { AppFacade } from './+state/app.facade';
-import { combineLatest, Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { ChangeDetectionStrategy, Component, OnInit, OnDestroy } from '@angular/core';
 import { AlertController, IonRouterOutlet, MenuController, ModalController, ToastController } from '@ionic/angular';
 import { Location } from '@angular/common';
+import { environment } from '../environments/environment';
+import { getMessaging, getToken, NotificationPayload, onMessage } from 'firebase/messaging';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +14,13 @@ import { Location } from '@angular/common';
   styleUrls: ['app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements OnDestroy{
+export class AppComponent implements OnInit, OnDestroy{
   public currentPage$: Observable<string> = this.appFacade.currentPage$;
   public navigateBack$: Observable<boolean> = this.appFacade.navigateBack$;
   public alert$: Observable<string> = this.appFacade.alert$;
   public toast$: Observable<string> = this.appFacade.toast$;
+  public message$$: BehaviorSubject<NotificationPayload> = this.messagesService.currentMessage;
+  // message: any = null;
 
   private userCourses$: Observable<{ courseId: string; color: string }[]> = this.appFacade.userCourses$;
   private subcriptions: Subscription = new Subscription();
@@ -26,7 +31,7 @@ export class AppComponent implements OnDestroy{
     private location: Location,
     private alertController: AlertController,
     private toastController: ToastController,
-
+    private messagesService: MessagingService,
   ) {
     this.subcriptionsMessages.add(
       combineLatest([this.alert$, this.toast$]).subscribe(([alert, toast]) => {
@@ -73,11 +78,41 @@ export class AppComponent implements OnDestroy{
         const L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
         const fontColor = (L > 0.179) ? darkColor : lightColor;
         const style = document.createElement('style');
-        style.innerHTML = '.' + course.courseId + ' { background: ' + course.color + '; color: ' + fontColor + '}';
+        style.innerHTML = '.c' + course.courseId + ' { background: ' + course.color + '; color: ' + fontColor + '}';
         document.getElementsByTagName('head')[0].appendChild(style);
       });
     }));
   }
+
+  ngOnInit(): void {
+    // this.requestPermission();
+    // this.listen();
+    this.messagesService.requestPermission();
+    this.messagesService.receiveMessage();
+  }
+
+  // requestPermission() {
+  //   const messaging = getMessaging();
+  //   getToken(messaging,
+  //   { vapidKey: environment.firebase.vapidKey}).then(
+  //     (currentToken) => {
+  //       if (currentToken) {
+  //         console.log('Hurraaa!!! we got the token.....');
+  //         console.log(currentToken);
+  //       } else {
+  //         console.log('No registration token available. Request permission to generate one.');
+  //       }
+  //   }).catch((err) => {
+  //       console.log('An error occurred while retrieving token. ', err);
+  //   });
+  // }
+  // listen() {
+  //   const messaging = getMessaging();
+  //   onMessage(messaging, (payload) => {
+  //     console.log('Message received. ', payload);
+  //     this.message=payload;
+  //   });
+  // }
 
   navigateBack() {
     this.location.back();

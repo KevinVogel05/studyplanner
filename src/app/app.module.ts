@@ -24,6 +24,10 @@ import { FooterTabsComponent } from './utils/footer-tabs/footer-tabs.component';
 //Services
 import { CustomValidationService } from './services/custom-validation.service';
 import { TimeService } from './services/time.service';
+import { MessagingService } from './services/messaging.service';
+
+import { initializeApp } from 'firebase/app';
+initializeApp(environment.firebase);
 
 @NgModule({
   declarations: [AppComponent, FooterTabsComponent],
@@ -45,6 +49,7 @@ import { TimeService } from './services/time.service';
     AppFacade,
     CustomValidationService,
     TimeService,
+    MessagingService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],

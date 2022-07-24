@@ -223,14 +223,41 @@ export const reducer = createReducer(
     const alertMessage: string = undefined;
     return { ...state, alertMessage };
   }),
-  on(AppActions.loginFailed, (state: State, action) => {
+  on(
+    AppActions.registerFailed,
+    AppActions.createUserRoleFailed,
+    AppActions.changePasswordFailed,
+    AppActions.deleteUserAuthFailed,
+    AppActions.deleteUserFailed,
+    AppActions.unsubscribeCoursesFailed,
+    AppActions.loginFailed,
+    AppActions.loadUserRoleFailed,
+    AppActions.loadCourseTaskFailed,
+    AppActions.loadPersonalTaskFailed,
+    AppActions.createPersonalTaskFailed,
+    AppActions.updatePersonalTaskFailed,
+    AppActions.completePersonalTaskFailed,
+    AppActions.deletePersonalTaskFailed,
+    AppActions.updateCourseColorsFailed,
+    AppActions.subscribeCourseFailed,
+    AppActions.checkCourseIdInUse,
+    AppActions.updateCourseFailed,
+    AppActions.deleteCourseFailed,
+    AppActions.unsubscribeCourseUsersFailed,
+    AppActions.deleteCourseTasksFailed,
+    AppActions.createCourseTaskFailed,
+    AppActions.updateCourseTaskFailed,
+    AppActions.completeCourseTaskFailed,
+    AppActions.clearCourseTaskStatsFailed,
+    AppActions.deleteCourseTaskFailed,
+    (state: State, action) => {
     const alertMessage: string = action.message;
     return { ...state, alertMessage };
   }),
 
 
-  on(AppActions.checkCourseIdInUse, (state: State, action) => {
-    const alertMessage: string = action.message;
-    return { ...state, alertMessage };
-  }),
+  // on(AppActions.checkCourseIdInUse, (state: State, action) => {
+  //   const alertMessage: string = action.message;
+  //   return { ...state, alertMessage };
+  // }),
 );

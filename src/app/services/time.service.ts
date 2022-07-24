@@ -21,7 +21,7 @@ export class TimeService {
 
     const difference = dueDate - currentDate;
     if (difference >= 0) {
-      return days + 'd ' + (hours-2) + 'h ' + minutes + 'min';
+      return days + 'd ' + hours + 'h ' + minutes + 'min';
     } else {
       return 'none';
     }

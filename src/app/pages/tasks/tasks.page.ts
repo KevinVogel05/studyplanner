@@ -1,3 +1,4 @@
+import { Priority } from './../../enums/priority.enum';
 import { TimeService } from './../../services/time.service';
 import { PersonalTask } from './../../interfaces/personalTask.interface';
 import { Task } from './../../interfaces/task.interface';
@@ -26,6 +27,10 @@ export class TasksPage {
   tasks$: Observable<PersonalTask[]>;
 
   currentTaskId: string;
+
+  priorityOne: Priority = Priority.Important;
+  priorityTwo: Priority = Priority.Normal;
+  priorityThree: Priority = Priority.Optional;
 
   //Task Form
   createTaskForm: FormGroup = new FormGroup({

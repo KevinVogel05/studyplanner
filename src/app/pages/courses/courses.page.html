@@ -7,7 +7,7 @@
 <ion-content>
     <!-- course list -->
     <ion-list *ngIf="courses$ | async as courses">
-        <ion-item *ngFor="let course of courses; index as i" [routerLink]="['/courses', course.courseId]" [ngClass]="course.courseId" color="-">
+        <ion-item *ngFor="let course of courses; index as i" [routerLink]="['/courses', course.courseId]" [ngClass]="'c' + course.courseId" color="-">
             <ion-label>
                 {{ course.courseName }}
                 <p class="sub-label">{{ course.courseId }}</p>
@@ -16,58 +16,58 @@
         </ion-item>
     </ion-list>
 
-    <!-- fab placed to the bottom end -->
-    <div *ngIf="userRole$ | async as role">
-        <ion-fab *ngIf="role === 'Student'" vertical="bottom" horizontal="end" slot="fixed">
-            <ion-fab-button>
-                <ion-icon (click)="subscribeCourse()" name="add"></ion-icon>
-            </ion-fab-button>
-        </ion-fab>
-        <ion-fab *ngIf="role === 'Professor'" vertical="bottom" horizontal="end" slot="fixed">
-            <ion-fab-button>
-                <ion-icon id="add-courses-modal" name="add"></ion-icon>
-            </ion-fab-button>
-        </ion-fab>
-    </div>
-
-    <!-- Add Courses Modal (Prof)-->
-    <ion-modal trigger="add-courses-modal">
-        <ng-template>
-            <ion-toolbar>
-                <ion-title>Create Course</ion-title>
-                <ion-buttons slot="end">
-                    <ion-button (click)="closeModal()">Close</ion-button>
-                </ion-buttons>
-            </ion-toolbar>
-            <ion-content>
-                <form [formGroup]="createCourseForm">
-                    <ion-item>
-                        <ion-label position="floating">Course Code</ion-label>
-                        <ion-input type="text" formControlName="courseId" autocapitalize="characters"></ion-input>
-                        <div *ngIf="createCourseForm.get('courseId').hasError('minlength')" class="input-error-message">Code has to be between 5-10 characters long.</div>
-                        <div *ngIf="createCourseForm.get('courseId').hasError('maxlength')" class="input-error-message">Code has to be between 5-10 characters long.</div>
-                        <div *ngIf="createCourseForm.get('courseId').hasError('pattern')" class="input-error-message">No Special characters allowed.</div>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label position="floating">Course Name</ion-label>
-                        <ion-input type="text" formControlName="courseName"></ion-input>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label position="floating">Professor</ion-label>
-                        <ion-input type="text" formControlName="ownerName"></ion-input>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label position="floating">Description (Optional)</ion-label>
-                        <ion-input type="text" formControlName="description"></ion-input>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label position="floating">Link (Optional)</ion-label>
-                        <ion-input type="text" formControlName="link"></ion-input>
-                    </ion-item>
-                    <br>
-                    <ion-button expand="block" [disabled]="!createCourseForm.valid" (click)="createCourse()">Create Course</ion-button>
-                </form>
-            </ion-content>
-        </ng-template>
-    </ion-modal>
 </ion-content>
+<!-- fab placed to the bottom end -->
+<div *ngIf="userRole$ | async as role">
+    <ion-fab *ngIf="role === 'Student'" vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button>
+            <ion-icon (click)="subscribeCourse()" name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+    <ion-fab *ngIf="role === 'Professor'" vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button>
+            <ion-icon id="add-courses-modal" name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</div>
+
+<!-- Add Courses Modal (Prof)-->
+<ion-modal trigger="add-courses-modal">
+    <ng-template>
+        <ion-toolbar>
+            <ion-title>Create Course</ion-title>
+            <ion-buttons slot="end">
+                <ion-button (click)="closeModal()">Close</ion-button>
+            </ion-buttons>
+        </ion-toolbar>
+        <ion-content>
+            <form [formGroup]="createCourseForm">
+                <ion-item>
+                    <ion-label position="floating">Course Code</ion-label>
+                    <ion-input type="text" formControlName="courseId" autocapitalize="characters"></ion-input>
+                    <div *ngIf="createCourseForm.get('courseId').hasError('minlength')" class="input-error-message">Code has to be between 5-10 characters long.</div>
+                    <div *ngIf="createCourseForm.get('courseId').hasError('maxlength')" class="input-error-message">Code has to be between 5-10 characters long.</div>
+                    <div *ngIf="createCourseForm.get('courseId').hasError('pattern')" class="input-error-message">No Special characters allowed.</div>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Course Name</ion-label>
+                    <ion-input type="text" formControlName="courseName"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Professor</ion-label>
+                    <ion-input type="text" formControlName="ownerName"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Description (Optional)</ion-label>
+                    <ion-input type="text" formControlName="description"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Link (Optional)</ion-label>
+                    <ion-input type="text" formControlName="link"></ion-input>
+                </ion-item>
+                <br>
+                <ion-button expand="block" [disabled]="!createCourseForm.valid" (click)="createCourse()">Create Course</ion-button>
+            </form>
+        </ion-content>
+    </ng-template>
+</ion-modal>

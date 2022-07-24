@@ -6,6 +6,17 @@
             <ion-title>{{ currentPage$ | async }}</ion-title>
             <ion-icon id="options" style="padding: 10px;" name="ellipsis-horizontal" slot="end" [hidden]="(currentPage$ | async) === 'Login'"></ion-icon>
         </ion-toolbar>
+        <div *ngIf="(message$$ | async) as notification">
+            <h1>{{ notification.title }}</h1>
+            <h2>{{ notification.body }}</h2>
+        </div>
+        <!-- <div *ngIf="message;">
+            <h1>{{ message.notification.title }}</h1>
+            <h2>{{ message.notification.body }}</h2>
+        </div>
+        <div *ngIf="!message;">
+            No Message Arrived
+        </div> -->
     </ion-header>
     <!-- Options Popover -->
     <ion-popover trigger="options" dismissOnSelect="true">

@@ -60,7 +60,7 @@ export class TaskDetailsComponent implements OnInit {
   openFeedbackAlert() {
     this.alertController.create({
       header: 'Feedback',
-      message: 'Please take a few seconds to and provide some feedback. (Anonymously)',
+      message: 'Please take a few seconds to provide some feedback. (Anonymously)',
       buttons: [
         { text: 'Cancel', role: 'cancel'},
         {

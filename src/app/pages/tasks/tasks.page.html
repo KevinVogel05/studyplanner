@@ -34,7 +34,7 @@
                 <ion-label slot="end">{{timeService.getTimeLeft(date.key)}}</ion-label>
             </ion-item-divider>
             <ion-item-sliding *ngFor="let task of date.value; index as i" #item>
-                <ion-item (click)="openTaskDetails(task)" [ngClass]="task.courseId ? task.courseId : 'ptask'" color="-">
+                <ion-item (click)="openTaskDetails(task)" [ngClass]="task.courseId ? 'c'+task.courseId : 'ptask'" color="-">
                     <ion-label>{{ task.title }}</ion-label>
                     <ion-label slot="end">{{ task.priority }}</ion-label>
                 </ion-item>
@@ -46,15 +46,15 @@
         </div>
     </ion-list>
 
-    <!-- fab placed to the bottom end -->
-    <div>
-        <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-            <ion-fab-button id="create-personal-task-modal">
-                <ion-icon name="add"></ion-icon>
-            </ion-fab-button>
-        </ion-fab>
-    </div>
 </ion-content>
+<!-- fab placed to the bottom end -->
+<div>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button id="create-personal-task-modal">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</div>
 
 <ion-modal trigger="create-personal-task-modal">
     <ng-template>
@@ -73,9 +73,9 @@
                 <ion-item lines="full">
                     <ion-label position="floating">Priority</ion-label>
                     <ion-select placeholder="Select Priority" formControlName="priority">
-                        <ion-select-option value="High">High</ion-select-option>
-                        <ion-select-option value="Medium">Medium</ion-select-option>
-                        <ion-select-option value="Low">Low</ion-select-option>
+                        <ion-select-option [value]="priorityOne">{{priorityOne}}</ion-select-option>
+                        <ion-select-option [value]="priorityTwo">{{priorityTwo}}</ion-select-option>
+                        <ion-select-option [value]="priorityThree">{{priorityThree}}</ion-select-option>
                     </ion-select>
                 </ion-item>
                 <ion-item lines="full">
@@ -112,9 +112,9 @@
                 <ion-item lines="full">
                     <ion-label position="floating">Priority</ion-label>
                     <ion-select placeholder="Select Priority" formControlName="priority">
-                        <ion-select-option value="High">High</ion-select-option>
-                        <ion-select-option value="Medium">Medium</ion-select-option>
-                        <ion-select-option value="Low">Low</ion-select-option>
+                        <ion-select-option [value]="priorityOne">{{priorityOne}}</ion-select-option>
+                        <ion-select-option [value]="priorityTwo">{{priorityTwo}}</ion-select-option>
+                        <ion-select-option [value]="priorityThree">{{priorityThree}}</ion-select-option>
                     </ion-select>
                 </ion-item>
                 <ion-item lines="full">

@@ -6,8 +6,8 @@
 
 <ion-content>
     <!-- Login Screen -->
-    <div class="sp-logo-placeholder">Logo</div>
-    <form [formGroup]="loginForm">
+    <!-- <div class="sp-logo-placeholder">Logo</div> -->
+    <form [formGroup]="loginForm" class="center">
         <ion-item>
             <ion-label position="floating">Email</ion-label>
             <ion-input type="email" formControlName="email"></ion-input>
@@ -19,8 +19,8 @@
         </ion-item>
         <br>
         <ion-button expand="full" [disabled]="!loginForm.valid" (click)="login()">Login</ion-button>
+        <div id="register-modal" class="register-modal-button">Create Account</div>
     </form>
-    <div id="register-modal" class="register-modal-button">Create Account</div>
 
 
     <!-- Register Modal -->
@@ -33,7 +33,7 @@
                 </ion-buttons>
             </ion-toolbar>
             <ion-content>
-                <div class="sp-logo-placeholder">Logo</div>
+                <!-- <div class="sp-logo-placeholder">Logo</div> -->
                 <form [formGroup]="registerForm">
                     <ion-item lines="full">
                         <ion-label position="stacked">Email</ion-label>
@@ -58,7 +58,7 @@
                         </ion-select>
                     </ion-item>
                     <br>
-                    <ion-button expand="full" [disabled]="!registerForm.valid" (click)="register()">Create Account</ion-button>
+                    <ion-button expand="full" slot="end" [disabled]="!registerForm.valid" (click)="register()">Create Account</ion-button>
                 </form>
             </ion-content>
         </ng-template>

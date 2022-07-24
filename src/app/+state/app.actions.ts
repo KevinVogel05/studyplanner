@@ -97,7 +97,7 @@ export const loadUserDataSuccess = createAction(
   '[User] Load User Data Success', props<{ role: string; docId: string; courses: { courseId: string; color: string}[] }>()
 );
 export const loadUserRoleFailed = createAction(
-  '[User] Load User Data Failed'
+  '[User] Load User Data Failed', props<{ message: string }>()
 );
 
 //Load Courses

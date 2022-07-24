@@ -8,6 +8,7 @@ import { AppFacade } from 'src/app/+state/app.facade';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TimeService } from 'src/app/services/time.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Priority } from 'src/app/enums/priority.enum';
 
 @Component({
   selector: 'app-course-details',
@@ -28,6 +29,10 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
   tasks$: Observable<{ [date: string]: Task[] }>;
 
   currentTaskId: string;
+
+  priorityOne: Priority = Priority.Important;
+  priorityTwo: Priority = Priority.Normal;
+  priorityThree: Priority = Priority.Optional;
 
   //Task Form
   createTaskForm: FormGroup = new FormGroup({
@@ -124,7 +129,7 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
   }
 
   openCourseTaskDetails(task: Task) {
-    const subCount = this.course.subCount;
+    const subCount = this.course.subscribers.length;
     this.modalController.create({
       component: CourseTaskDetailsComponent,
       componentProps: {

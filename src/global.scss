@@ -63,10 +63,10 @@ ion-item-divider {
 }
 
 ion-list-header {
-    position: sticky;
+    // position: sticky;
     top: 0;
     z-index: 10;
-    background-color: #fff;
+    // background-color: #fff;
 }
 
 ion-label {
@@ -116,4 +116,12 @@ input.color-picker-custom {
 .ptask {
     background: #fff;
     color: #000;
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    // align-items: center;
+    min-height: 75vh;
 }
